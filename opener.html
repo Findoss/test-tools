@@ -31,8 +31,7 @@
     </div>
 
     <script>
-      const thisURL = window.location.href;
-      const [baseURL, openURL] = thisURL.split("?url=");
+      const [baseURL, openURL] = window.location.href.split("?url=");
 
       const $example = document.querySelector(".example");
       const $inputURL = document.querySelector(".url");
