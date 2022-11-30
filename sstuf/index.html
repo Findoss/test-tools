@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ref-generator</title>
+    <script src="./qrcode.js"></script>
+    <link rel="stylesheet" href="./milligram.min.css" />
+  </head>
+  <body>
+    <style>
+      a {
+        word-wrap: break-word;
+      }
+    </style>
+
+    <div class="container">
+      <div class="row">
+        <div class="column column-60">
+          <h1>Ref-generator</h1>
+          <p>Генератор заполнения плейсхолдеров</p>
+
+          <!-- code -->
+          <input type="text" class="url" value="##COUNTRY_ID##" />
+          <button type="button" class="generate">Generate</button>
+          <br />
+          <strong>Demo: </strong><a class="demo" target="_blank"></a>
+          <br />
+          <strong>Redir: </strong><a class="redir" target="_blank"></a>
+          <br />
+          <strong>Opener: </strong><a class="link" target="_blank"></a>
+          <br />
+          <div class="qrcode"></div>
+          <br />
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th><span class="pln">placeholder</span></th>
+                  <th><span class="pln">value</span></th>
+                </tr>
+              </thead>
+              <tbody class="placeholders-values"></tbody>
+            </table>
+          </div>
+          <!-- code -->
+        </div>
+        <div class="column column-40 color-block">
+          <h3>Как использовать</h3>
+          Инструмент для проверки наличия opener на странице
+          <ol>
+            <li>в url необходимо добавить параметр ?url={url сайта}</li>
+            <li>перейти ofgjs;eok ;osekf ;oseijr ;gofik</li>
+            <li>
+              если на текущей вкладке откроется сайт - значит есть реклама
+            </li>
+          </ol>
+
+          <h3>Пример</h3>
+          <span class="this-host"></span><span>?url=</span>https://google.com
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const $btnGeneration = document.querySelector(".generate");
+      const $tablePlaceholders = document.querySelector(".placeholders-values");
+      const $inputURL = document.querySelector(".url");
+      const $demoURL = document.querySelector(".demo");
+      const $openerURL = document.querySelector(".link");
+      const $redirURL = document.querySelector(".redir");
+      const $qrcode = document.querySelector(".qrcode");
+
+      const PLACEHOLDERS = [
+        ["##TIMESTAMP##", 10000, 100000],
+        ["##AD_UNIT_HEIGHT##", 100, 1000],
+        ["##AD_UNIT_WIDTH##", 100, 1000],
+        ["##ADVERTISER_ID##", 10000, 100000],
+        ["##CAMPAIGN_ID##", 10000, 100000],
+        ["##BANNER_ID##", 10000, 100000],
+        ["##LANDING_ID##", 10000, 100000],
+        ["##CAMPAIGN_NAME##", 10000, 100000],
+        ["##CLICK_END_TS##", 10000, 100000],
+        ["##CLICK_MD5##", 10000, 100000],
+        ["##CUSTOM_PARAM(param)##", 10000, 100000],
+        ["##DEVICE_ID##", 10000, 100000],
+        ["##PUBLISHER_ID##", 10000, 100000],
+        ["##ZONE_ID##", 10000, 100000],
+        ["##PLACEMENT_ID##", 10000, 100000],
+        ["##PLACEMENT_CATEGORY_ID##", 10000, 100000],
+        ["##PLACEMENT_KEY##", 10000, 100000],
+        ["##PLACEMENT_SUB_ID##", 10000, 100000],
+        ["##REFERER##", 10000, 100000],
+        ["##REFERER_ESC##", 10000, 100000],
+        ["##COUNTRY_ID##", 10000, 100000],
+        ["##REMOTE_COUNTRY##", 10000, 100000],
+        ["##COUNTRY_CODE##", 10000, 100000],
+        ["##REMOTE_IP##", 10000, 100000],
+        ["##REMOTE_LANGUAGE##", 10000, 100000],
+        ["##SUB_ID_SHORT(action)##", 1000000000000000, 100000000000000000000],
+        ["##SUB_ID(action)##", 1000000000000000, 100000000000000000000],
+        ["##SUB_ID_1_50(action)##", 1000000000000000, 100000000000000000000],
+        ["##SUB_ID32(action)##", 1000000000000000, 100000000000000000000],
+        ["##SUB_ID32_1_50(action)##", 1000000000000000, 100000000000000000000],
+        ["##TIMESTAMP##", 10000, 100000],
+        ["##UUID##", 10000, 100000],
+        ["##URL##", 10000, 100000],
+        ["##URL_ENC##", 10000, 100000],
+      ];
+
+      function getRandom(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+
+      function fillTable(data) {
+        $tablePlaceholders.innerHTML = "";
+
+        data.forEach(([p, v]) => {
+          $tablePlaceholders.innerHTML += `
+		  	<tr class="placeholders-values">
+				<td><span class="pln">${p}</span></td>
+				<td><span class="pln">${v}</span></td>
+			</tr>
+		  `;
+        });
+      }
+
+      function mathPlaceholders(url) {
+        const data = [];
+
+        PLACEHOLDERS.forEach(([p, min, max]) => {
+          if (url.includes(p)) {
+            data.push([p, getRandom(min, max)]);
+          }
+        });
+
+        return data;
+      }
+
+      function replacePlaceholders(data, url) {
+        newUrl = url;
+
+        data.forEach(([p, v]) => {
+          newUrl = newUrl.replace(p, v);
+        });
+
+        return encodeURIComponent(newUrl);
+      }
+
+      function generationQRcode(url) {
+        $qrcode.innerHTML = "";
+
+        new QRCode($qrcode, {
+          text: url,
+          width: 700,
+          height: 700,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
+        });
+      }
+
+      function generationDemo(url) {
+        $demoURL.href = url;
+        $demoURL.innerText = url;
+      }
+
+      function generationRedir(url) {
+        const redirURL =
+          document.location.protocol +
+          "//" +
+          document.location.host +
+          "/redir.html?url=" +
+          url;
+
+        $redirURL.href = redirURL;
+        $redirURL.innerText = redirURL;
+      }
+
+      function generationOpener(url) {
+        const openerURL =
+          document.location.protocol +
+          "//" +
+          document.location.host +
+          "/opener.html?url=" +
+          url;
+
+        $openerURL.href = openerURL;
+        $openerURL.innerText = openerURL;
+      }
+
+      $btnGeneration.addEventListener("click", () => {
+        const url = $inputURL.value;
+
+        const data = mathPlaceholders(url);
+        const newUrl = replacePlaceholders(data, url);
+
+        fillTable(data);
+
+        generationDemo(newUrl);
+        generationRedir(newUrl);
+        generationOpener(newUrl);
+        generationQRcode(newUrl);
+      });
+    </script>
+  </body>
+</html>
