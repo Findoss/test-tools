@@ -9,7 +9,8 @@
   </head>
   <body>
     <style>
-      a {
+      a,
+      .wrap {
         word-wrap: break-word;
       }
     </style>
@@ -47,17 +48,25 @@
         </div>
         <div class="column column-40 color-block">
           <h3>Как использовать</h3>
-          Инструмент для проверки наличия opener на странице
           <ol>
-            <li>в url необходимо добавить параметр ?url={url сайта}</li>
-            <li>перейти ofgjs;eok ;osekf ;oseijr ;gofik</li>
-            <li>
-              если на текущей вкладке откроется сайт - значит есть реклама
-            </li>
+            <li>Указать URL c плейсхолдарами</li>
           </ol>
 
+          <h3>Примечание</h3>
+          <ul>
+            <li>demo - итоговый url</li>
+            <li>redir - обычный редирект</li>
+            <li>opener - для проверки opener</li>
+            <li>qr code</li>
+            <li>
+              table - в таблице будет отображаться все замененные плейсхолдеры и
+              их значения
+            </li>
+          </ul>
           <h3>Пример</h3>
-          <span class="this-host"></span><span>?url=</span>https://google.com
+          <p class="wrap">
+            https://google.com/?t=##TIMESTAMP##&auh=##AD_UNIT_HEIGHT##&auw=##AD_UNIT_WIDTH##&aid=##ADVERTISER_ID##&cid=##CAMPAIGN_ID##&bid=##BANNER_ID##&lid=##LANDING_ID##&cn=##CAMPAIGN_NAME##
+          </p>
         </div>
       </div>
     </div>
@@ -103,7 +112,6 @@
         ["##SUB_ID_1_50(action)##", 1000000000000000, 100000000000000000000],
         ["##SUB_ID32(action)##", 1000000000000000, 100000000000000000000],
         ["##SUB_ID32_1_50(action)##", 1000000000000000, 100000000000000000000],
-        ["##TIMESTAMP##", 10000, 100000],
         ["##UUID##", 10000, 100000],
         ["##URL##", 10000, 100000],
         ["##URL_ENC##", 10000, 100000],
@@ -115,6 +123,8 @@
 
       function fillTable(data) {
         $tablePlaceholders.innerHTML = "";
+
+        console.log(data);
 
         data.forEach(([p, v]) => {
           $tablePlaceholders.innerHTML += `
