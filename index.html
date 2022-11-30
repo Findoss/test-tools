@@ -21,7 +21,7 @@
           <p>Генератор заполнения плейсхолдеров</p>
 
           <!-- code -->
-          <input type="text" class="url" value="##COUNTRY_ID##" />
+          <input type="text" class="url" value="" />
           <button type="button" class="generate">Generate</button>
           <br />
           <strong>Demo: </strong><a class="demo" target="_blank"></a>
@@ -170,7 +170,7 @@
           document.location.protocol +
           "//" +
           document.location.host +
-          "/redir.html?url=" +
+          "./redir.html?url=" +
           url;
 
         $redirURL.href = redirURL;
@@ -182,7 +182,7 @@
           document.location.protocol +
           "//" +
           document.location.host +
-          "/opener.html?url=" +
+          "./opener.html?url=" +
           url;
 
         $openerURL.href = openerURL;
