@@ -63,6 +63,7 @@
     </div>
 
     <script>
+      const baseUrl = window.location.href.split("?")[0];
       const $btnGeneration = document.querySelector(".generate");
       const $tablePlaceholders = document.querySelector(".placeholders-values");
       const $inputURL = document.querySelector(".url");
@@ -117,11 +118,11 @@
 
         data.forEach(([p, v]) => {
           $tablePlaceholders.innerHTML += `
-		  	<tr class="placeholders-values">
-				<td><span class="pln">${p}</span></td>
-				<td><span class="pln">${v}</span></td>
-			</tr>
-		  `;
+       	<tr class="placeholders-values">
+      	<td><span class="pln">${p}</span></td>
+      	<td><span class="pln">${v}</span></td>
+      </tr>
+       `;
         });
       }
 
@@ -166,24 +167,14 @@
       }
 
       function generationRedir(url) {
-        const redirURL =
-          document.location.protocol +
-          "//" +
-          document.location.host +
-          "./redir.html?url=" +
-          url;
+        const redirURL = baseUrl + "/redir.html?url=" + url;
 
         $redirURL.href = redirURL;
         $redirURL.innerText = redirURL;
       }
 
       function generationOpener(url) {
-        const openerURL =
-          document.location.protocol +
-          "//" +
-          document.location.host +
-          "./opener.html?url=" +
-          url;
+        const openerURL = baseUrl + "/opener.html?url=" + url;
 
         $openerURL.href = openerURL;
         $openerURL.innerText = openerURL;
